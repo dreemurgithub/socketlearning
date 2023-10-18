@@ -8,14 +8,18 @@ socket.on('message', text => {
     document.querySelector('ul').appendChild(el)
 
 });
+document.querySelector('input').focus()
 
-document.querySelector('button').onclick = () => {
-
-    const text = document.querySelector('input').value;
-    socket.emit('message', text)
-    
+const sendMessage = ()=>{
+    let text = document.querySelector('input').value;
+    if(text) socket.emit('message', text)
+    document.querySelector('input').value = ''
 }
 
+document.querySelector('button').onclick = sendMessage
+window.addEventListener('keypress',(e)=>{
+    if (e.key === 'Enter') sendMessage()
+})
 // Regular Websockets
 
 // const socket = new WebSocket('ws://localhost:8080');
