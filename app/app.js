@@ -33,11 +33,10 @@ const sendMessageRoom = ()=>{
 
 
 const joinRoom = () =>{
-    const room = document.querySelector('#room') ? document.querySelector('#room').value : ''
+    const roomName = document.querySelector('#room') ? document.querySelector('#room').value : ''
     // socket.emit("join-room",{room,message:'join new room message'})
     // socket.send(JSON.stringify({type: 'joinRoom',room}))
-    socket.emit("join-room",room)
-    console.log(socket.rooms)
+    socket.emit("join-room",roomName)
     // return document.querySelector('#room').value
 
     // socket.joinRoom(e.target.value)
