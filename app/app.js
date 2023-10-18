@@ -1,4 +1,3 @@
-
 const socket = io('ws://localhost:8080');
 
 socket.on('message', text => {
@@ -28,15 +27,17 @@ const sendMessage = ()=>{
 const sendMessageRoom = ()=>{
     const room = document.querySelector('#room') ? document.querySelector('#room').value : ''
     let message = document.querySelector('#message').value;
-    if(message) socket.emit('messagePrivate', {message,room})
+    if(message) socket.emit('messagePrivate', message,room )
     document.querySelector('#message').value = ''
 }
 
 
 const joinRoom = () =>{
     const room = document.querySelector('#room') ? document.querySelector('#room').value : ''
-    console.log(room)
-    socket.emit("join-room",{room,message:'join new room message'})
+    // socket.emit("join-room",{room,message:'join new room message'})
+    // socket.send(JSON.stringify({type: 'joinRoom',room}))
+    socket.emit("join-room",room)
+    console.log(socket.rooms)
     // return document.querySelector('#room').value
 
     // socket.joinRoom(e.target.value)
