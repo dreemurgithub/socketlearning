@@ -5,20 +5,29 @@ const io = require("socket.io")(http, {
 });
 io.close();
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  // console.log(socket.id);
   socket.on("message", (message) => {
-    console.log(message);
+    // console.log(message);
     // io.emit("message", `${socket.id.substr(0, 2)} said ${message}`);
-    io.emit("message", `${socket.id.substr(0, 2)} said ${message} `);
+    io.to('helloworld').emit("message", `${socket.id.substr(0, 2)} said ${message} `);
   });
   socket.on("join-room", (roomName) => {
-    // io.emit("message",`welcome to room: ${room}, message is: ${message}`)
     socket.join(roomName);
+    // io.to(roomName).emit("message",`welcome to room: ${roomName}`)
+    if(roomName!== 'helloworld')io.to(roomName).emit("messagePrivate",`id:${socket.id} join the ${roomName} room`)
+    else io.to(roomName).emit("messageGeneral",`welcome to general room`)
+
   });
+
   socket.on("messagePrivate", (message, room) => {
     
-    io.to(room).emit("message",`room: ${room}: id:${socket.id},message: ${message}`)
-    io.emit("message",message)
+    io.to(room).emit("messagePrivate",`room: ${room}: id:${socket.id},message: ${message}`)
+    // io.emit("message",message)
+  });
+  socket.on("messageGeneral", message  => {
+    
+    io.to('helloworld').emit("messageGeneral", `${socket.id.substr(0, 2)} said ${message} `);
+    // io.emit("message",message)
   });
 });
 

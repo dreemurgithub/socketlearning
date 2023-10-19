@@ -9,17 +9,26 @@
 </head>
 <body>
 
-    <ul>
-        
-    </ul>
-    <div>
+    <div style="border: 1px red solid;">
         <input type="text" placeholder="room" id ='room' value="abc">
         <button id="join">Join room</button>
+        <input id="messagePrivate" type="text" class="one">
+        <button id="send" class="one">Send</button>
+        <ul id="private">
+            
+        </ul>
+    </div>
+    <div style="border: 1px green solid;">
+        <p>General room have the room name as helloworld</p>
+        <input id="messageGeneral" type="text" class="two">
+        <button id="sendHelloWorld" class="two">Send</button>
+        <ul id="general">
+            
+        </ul>
     </div>
     <div>
 
-        <input placeholder="message" id="message" type="text">
-        <button id="send">Send</button>
+        
     </div>
 
 </body>
