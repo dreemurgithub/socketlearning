@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
     <script defer src="app.js"></script>
-</head>
-<body>
-
-    <div style="border: 1px red solid;">
-        <input type="text" placeholder="room" id ='room' value="abc">
-        <button id="join">Join room</button>
-        <input id="messagePrivate" type="text" class="one">
-        <button id="send" class="one">Send</button>
-        <ul id="private">
-            
-        </ul>
+    <script defer src="listen.js"></script>
+    <script defer src="startup.js"></script>
+  </head>
+  <body>
+    <div style="border: 1px red solid">
+      <input type="text" placeholder="room" id="room" />
+      <button id="join">Join room</button>
+      <input id="messagePrivate" type="text" />
+      <button id="sendRoom">Send</button>
+      <ul id="private"></ul>
     </div>
-    <div style="border: 1px green solid;">
-        <p>General room have the room name as helloworld</p>
-        <input id="messageGeneral" type="text" class="two">
-        <button id="sendHelloWorld" class="two">Send</button>
-        <ul id="general">
-            
-        </ul>
+    <div style="border: 1px green solid">
+      <p>General room have the room name as helloworld</p>
+      <input id="messageGeneral" type="text" />
+      <button id="sendHelloWorld">Send</button>
+      <ul id="general"></ul>
     </div>
-    <div>
-
-        
+    <div style="border: 1px black solid">
+      <p>Message to everyone</p>
+      <input id="message" type="text" />
+      <button id="send">Send</button>
+      <ul id="all"></ul>
     </div>
 
-</body>
+    <div style="border: 1px yellow solid">
+        <p>PM a user</p>
+        <input id="socketId" type="text" />
+        <input id="pm" type="text" />
+        <button id="pms">Send</button>
+        <ul id="sms"></ul>
+      </div>
+  </body>
 </html>

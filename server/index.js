@@ -1,42 +1,52 @@
 const http = require("http").createServer();
-
 const io = require("socket.io")(http, {
   cors: { origin: "*" },
 });
-io.close();
+io.close(); // end all previous connection when server shutdown
+const listId = [];
 io.on("connection", (socket) => {
-  // console.log(socket.id);
+  listId.push(socket.id);
   socket.on("message", (message) => {
-    // console.log(message);
-    // io.emit("message", `${socket.id.substr(0, 2)} said ${message}`);
-    io.to('helloworld').emit("message", `${socket.id.substr(0, 2)} said ${message} `);
+    socket.emit("message", message);
+    socket.broadcast.emit("message", `${socket.id}: ${message}`);
   });
   socket.on("join-room", (roomName) => {
     socket.join(roomName);
-    // io.to(roomName).emit("message",`welcome to room: ${roomName}`)
-    if(roomName!== 'helloworld')io.to(roomName).emit("messagePrivate",`id:${socket.id} join the ${roomName} room`)
-    else io.to(roomName).emit("messageGeneral",`welcome to general room`)
-
+    if (roomName !== "helloworld") {
+      io.to(roomName).emit(
+        "messagePrivate",
+        `id: ${socket.id} - online list: ${JSON.stringify(listId)}`
+      );
+    } else {
+      io.to(roomName).emit(
+        "messageGeneral",
+        `Server annouce: id: ${socket.id}  ${JSON.stringify(listId)} is online`
+      );
+    }
   });
 
   socket.on("messagePrivate", (message, room) => {
-    
-    io.to(room).emit("messagePrivate",`room: ${room}: id:${socket.id},message: ${message}`)
-    // io.emit("message",message)
+    io.to(room).emit(
+      "messagePrivate",
+      `room: ${room}: id:${socket.id},message: ${message}`
+    );
   });
-  socket.on("messageGeneral", message  => {
-    
-    io.to('helloworld').emit("messageGeneral", `${socket.id.substr(0, 2)} said ${message} `);
-    // io.emit("message",message)
+  socket.on("messageGeneral", (message) => {
+    socket.broadcast.emit("messageGeneral", `${socket.id} said: ${message}`);
+    socket.emit("messageGeneral", `You said: ${message}`);
+  });
+  socket.on("pm", ({ id, message }) => {
+    // socket.to(id).emit(message); // wont work!
+    io.to(id).emit("pm", { id, message });
   });
 });
 
 http.listen(8080, () => console.log("listening on http://localhost:8080"));
+
 process.on("SIGINT", () => {
   console.log(" exit with Control C");
   io.close();
 });
-
 
 // The difference between socket.emit and io.emit lies in the scope of the emitted event and the clients it reaches.
 
@@ -51,4 +61,3 @@ process.on("SIGINT", () => {
 // It sends the event to all connected sockets (clients) that are currently connected to the server.
 // All clients, including the one that triggered the event, will receive the emitted event.
 // In summary, socket.emit is used for one-to-one communication between a specific client and the server, while io.emit is used for one-to-many communication, broadcasting an event to all connected clients.
-
