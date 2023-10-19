@@ -11,6 +11,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("message", `${socket.id}: ${message}`);
   });
   socket.on("join-room", (roomName) => {
+    if (socket.rooms.has(roomName)) {
+      io.to(roomName).emit("messagePrivate",`${socket.id} is going bye bye`)
+      socket.leave(roomName);
+      return;
+    }
     socket.join(roomName);
     if (roomName !== "helloworld") {
       io.to(roomName).emit(
@@ -30,6 +35,7 @@ io.on("connection", (socket) => {
       "messagePrivate",
       `room: ${room}: id:${socket.id},message: ${message}`
     );
+    // socket.to(room).emit(message) // this will not work!
   });
   socket.on("messageGeneral", (message) => {
     socket.broadcast.emit("messageGeneral", `${socket.id} said: ${message}`);
